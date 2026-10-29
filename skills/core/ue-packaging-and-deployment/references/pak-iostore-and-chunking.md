@@ -16,7 +16,7 @@ more `.pak` files. At runtime, the pak mount system makes the virtual file syste
 (UFS) transparently serve content from the archive.
 
 Properties:
-- One file per chunk (e.g. `pakchunk0-Windows.pak`, `pakchunk1-Windows.pak`).
+- One file per chunk (e.g. `pakchunk0-Linux.pak`, `pakchunk1-Linux.pak`; `-Windows` suffix on Windows).
 - Optional compression (Zlib, Zstd, Oodle) and encryption per-pak.
 - Supported on all platforms; the universal fallback format.
 

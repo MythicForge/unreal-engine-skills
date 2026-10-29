@@ -11,7 +11,7 @@ doc.
 
 ## What happens during a cook
 
-1. The cooker launches as a commandlet inside `UnrealEditor-cmd.exe` (or the editor
+1. The cooker launches as a commandlet inside `UnrealEditor-Cmd` (or the editor
    in a special `-run=cook` mode).
 2. It starts from the set of maps/assets specified on the command line (or all maps if
    `-allmaps` is passed) and walks the hard- and soft-reference graph, adding each
@@ -54,7 +54,7 @@ apply the same logic at directory granularity without touching the Asset Manager
 `UnrealTargetConfiguration` (source: `UEBuildTarget.cs`:1147) maps to compiler flags
 and engine preprocessor macros:
 
-**`Debug`** — no optimization (`/Od` on MSVC), full debug info. Both engine and game
+**`Debug`** — no optimization (`/Od` on MSVC, `-O0` on Clang — the Linux toolchain), full debug info. Both engine and game
 modules are unoptimized. Opening the editor requires the `-debug` flag. Rarely used for
 packaging; mainly for crash investigations.
 
@@ -131,11 +131,11 @@ source but a different runtime dependency can silently produce a broken build.
 
 ## Cook commandlet flags (selected)
 
-Used via `UnrealEditor-cmd.exe [project] -run=cook -targetplatform=[Platform] ...`:
+Used via `UnrealEditor-Cmd [project] -run=cook -targetplatform=[Platform] ...`:
 
 | Flag | Effect |
 |---|---|
-| `-targetplatform=Win64` | Target platform for the cook |
+| `-targetplatform=Linux` | Target platform for the cook (`Win64` on Windows; `LinuxServer` for dedicated server cooks) |
 | `-iterate` | Skip unchanged packages (iterative cook) |
 | `-allmaps` | Cook all maps in the project |
 | `-map=MapName` | Cook only specified map(s) |

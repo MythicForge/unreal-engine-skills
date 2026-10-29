@@ -1,7 +1,7 @@
 # Source conventions and naming
 
 Deep-dive companion to [../SKILL.md](../SKILL.md). Grounded in UE 5.8 at
-`E:\Program Files\Epic Games\UE_5.8\Engine\Source` (Build.version: 5.8.1).
+`$UE_ROOT/Engine/Source` (Build.version: 5.8.4).
 
 Covers naming prefixes, the Public/Private/Classes folder convention, how
 `*.generated.h` fits in, and Include What You Use (IWYU) rules.
@@ -15,12 +15,12 @@ kind of type you have and where to look:
 
 | Prefix | Type | Example | Location pattern |
 |---|---|---|---|
-| `A` | Actor (`AActor` subclass) | `ACharacter`, `AGameMode` | `Classes\GameFramework\` or a gameplay plugin |
-| `U` | UObject (`UObject` subclass, non-actor) | `UActorComponent`, `UWidget` | `Classes\Components\`, `UMG\Public\`, plugin `Public\` |
-| `F` | Non-UObject struct / class | `FVector`, `FHitResult`, `FGameplayTag` | `Core\Public\`, `Classes\` headers |
+| `A` | Actor (`AActor` subclass) | `ACharacter`, `AGameMode` | `Classes/GameFramework/` or a gameplay plugin |
+| `U` | UObject (`UObject` subclass, non-actor) | `UActorComponent`, `UWidget` | `Classes/Components/`, `UMG/Public/`, plugin `Public/` |
+| `F` | Non-UObject struct / class | `FVector`, `FHitResult`, `FGameplayTag` | `Core/Public/`, `Classes/` headers |
 | `E` | Enum | `EEndPlayReason`, `ECollisionChannel` | Near the classes that use them (same header) |
-| `T` | Template class | `TArray`, `TObjectPtr`, `TSubclassOf` | `Core\Public\Containers\`, `CoreUObject\Public\UObject\` |
-| `I` | Interface | `IGameplayTaskOwnerInterface` | Plugin or module `Public\` |
+| `T` | Template class | `TArray`, `TObjectPtr`, `TSubclassOf` | `Core/Public/Containers/`, `CoreUObject/Public/UObject/` |
+| `I` | Interface | `IGameplayTaskOwnerInterface` | Plugin or module `Public/` |
 | `G` | Global variable | `GWorld`, `GEngine` | Runtime module globals |
 | `s_` or `S` | (rare) singleton statics | — | — |
 
@@ -45,7 +45,7 @@ A module's headers are distributed across three root-level folders:
 
 - **`Classes/`** — Historically, UHT required reflected types (`UCLASS`,
   `USTRUCT`, `UENUM`) to live here. The engine still uses this for most gameplay
-  classes in the `Engine` module (e.g. `Classes\GameFramework\Actor.h`). New
+  classes in the `Engine` module (e.g. `Classes/GameFramework/Actor.h`). New
   modules sometimes put reflected types directly in `Public/` — UHT supports both.
 
 - **`Public/`** — Headers exposed to dependent modules. Any header here may be
@@ -121,7 +121,7 @@ Key rules:
   dependent module's *public headers* reference the dependency's types. Otherwise
   prefer `PrivateDependencyModuleNames` to avoid propagating the dependency chain.
 - **Finding the module name**: the module name equals the folder under `Source/`
-  that contains the `.Build.cs` — e.g., folder `Runtime\GameplayTags\` → module
+  that contains the `.Build.cs` — e.g., folder `Runtime/GameplayTags/` → module
   name `"GameplayTags"`.
 - **Plugin modules**: add the module name to `Build.cs` as normal; also ensure
   the plugin is listed (and enabled) in the `.uproject` or `.uplugin` file.

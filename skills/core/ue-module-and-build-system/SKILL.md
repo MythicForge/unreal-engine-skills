@@ -64,6 +64,12 @@ Source/MyGame/
 a header at `Public/Weapons/Gun.h` is included as `#include "Weapons/Gun.h"`.
 Files outside these canonical folders are treated as private automatically.
 
+**Linux is case-sensitive:** the include string must match the on-disk path exactly.
+`#include "Weapons/Gun.h"` fails if the file is `weapons/gun.h` or `Weapons/gun.h`
+(Windows compiles it fine, so the bug only surfaces on Linux CI). The module name must also
+match character-for-character across the folder (`Source/MyGame/`), `MyGame.Build.cs`, the
+`class MyGame : ModuleRules`, the `.uproject`/`.uplugin` `"Name"`, and `IMPLEMENT_MODULE(..., MyGame)`.
+
 ## `*.Build.cs` — ModuleRules
 
 Each module has exactly one `<Name>.Build.cs` in its root. UBT compiles it at build time.
@@ -233,7 +239,9 @@ plugin, try `PreDefault`.
 3. Add `Private/<New>Module.cpp` with `IMPLEMENT_MODULE(FDefaultModuleImpl, <New>)`.
 4. Add the module entry to `.uproject`/`.uplugin` `Modules` array.
 5. Add `<New>` to other modules' dependency lists where they consume it.
-6. Regenerate project files (right-click `.uproject` → Generate Visual Studio Project Files).
+6. Regenerate project files. Windows: right-click `.uproject` → Generate Visual Studio Project Files.
+   Linux: `$UE_ROOT/Engine/Build/BatchFiles/Linux/GenerateProjectFiles.sh -project="/path/MyGame.uproject" -game -engine`
+   (add `-vscode`, `-cmakefile`, or `-makefile` for non-Rider IDEs; produces `compile_commands.json` for clangd).
 7. Build.
 
 ## `<MODULE>_API` export macros
@@ -290,7 +298,7 @@ Rules:
 
 ## References & source material
 
-Engine source (UE 5.8, under `E:\Program Files\Epic Games\UE_5.8\Engine\Source\`):
+Engine source (UE 5.8, under `$UE_ROOT/Engine/Source/`):
 
 **C++ module system (Runtime/Core/Public/Modules/):**
 - `ModuleInterface.h` — `IModuleInterface`: `StartupModule()`:49, `ShutdownModule()`:79,

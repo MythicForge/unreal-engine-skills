@@ -166,9 +166,9 @@ File scopes:
 `UPythonScriptCommandlet` (`PythonScriptCommandlet.h:10`) runs a script headlessly:
 
 ```
-UnrealEditor-Cmd.exe "Project.uproject" -run=pythonscript -script="path/to/script.py"
+UnrealEditor-Cmd "Project.uproject" -run=pythonscript -script="path/to/script.py"
 # Or inline code:
-UnrealEditor-Cmd.exe "Project.uproject" -run=pythonscript -script="import unreal; unreal.log('done')"
+UnrealEditor-Cmd "Project.uproject" -run=pythonscript -script="import unreal; unreal.log('done')"
 ```
 
 The commandlet does **not** load a level automatically. If your script needs level content,
@@ -176,7 +176,7 @@ call `unreal.get_editor_subsystem(unreal.LevelEditorSubsystem).load_level("/Game
 
 Full editor startup (loads level, then runs script):
 ```
-UnrealEditor-Cmd.exe "Project.uproject" -ExecutePythonScript="path/to/script.py"
+UnrealEditor-Cmd "Project.uproject" -ExecutePythonScript="path/to/script.py"
 ```
 
 ---

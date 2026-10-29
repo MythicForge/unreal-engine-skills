@@ -21,9 +21,48 @@ correct in Unreal*, not *which tool to operate*.
 
 | Item | Value |
 |---|---|
-| Primary engine version | **UE 5.8** (`E:\Program Files\Epic Games\UE_5.8`) |
-| Engine source for cross-ref | 5.8 (binary install incl. source); 5.7 install kept for version diffing |
-| Engine source root (5.8) | `E:\Program Files\Epic Games\UE_5.8\Engine\Source` |
+| Primary engine version | **UE 5.8.4** (`$UE_ROOT`) |
+| Primary host OS | **Linux** (Windows and macOS notes kept where they differ) |
+| Engine source for cross-ref | 5.8.4 (Linux binary zip incl. source); 5.7 / 5.5 only if you install them for version diffing |
+| Engine source root (5.8) | `$UE_ROOT/Engine/Source` |
+
+### Platform notes (Linux first, Windows alternatives)
+
+`$UE_ROOT` = directory containing `Engine/` (set it, or `UE_ENGINE_ROOT` for the scripts).
+Linux has no Epic Games Launcher: use a source build from the `EpicGames/UnrealEngine`
+GitHub repo or the Linux binary zip from Epic. On this machine: `$UE_ROOT=~/projects/Linux_Unreal_Engine_5.8.4` (5.8.4).
+`$UE_ROOT_57` / `$UE_ROOT_55` denote optional extra installs for version diffing (none present here).
+
+| Concern | Linux | Windows |
+|---|---|---|
+| Editor binary | `Engine/Binaries/Linux/UnrealEditor` | `Engine\Binaries\Win64\UnrealEditor.exe` |
+| Commandlet binary | `UnrealEditor-Cmd` | `UnrealEditor-Cmd.exe` |
+| Packaged game | `MyGame.sh` → `MyGame/Binaries/Linux/MyGame` | `MyGame.exe` |
+| UAT | `Engine/Build/BatchFiles/RunUAT.sh` | `RunUAT.bat` |
+| UBT | `Engine/Build/BatchFiles/RunUBT.sh` | `Build.bat` / `UnrealBuildTool.exe` |
+| Generate project files | `Engine/Build/BatchFiles/Linux/GenerateProjectFiles.sh` (`-vscode`, `-cmakefile`, …) | right-click `.uproject`, `GenerateProjectFiles.bat` |
+| UAT/UBT platform name | `Linux`, `LinuxArm64`, `LinuxServer` (cook) | `Win64` |
+| Compiler / toolchain | Clang (engine-bundled cross-compile toolchain or system clang) | MSVC / Clang-cl |
+| IDE | Rider, VS Code + clangd (`compile_commands.json`) | Visual Studio, Rider |
+| Module binaries | `libUnrealEditor-<Module>.so` | `UnrealEditor-<Module>.dll` |
+| Debug symbols | `.debug`/`.sym` (ELF) | `.pdb` |
+| Config dir under `Saved/Config` | `LinuxEditor/`, `Linux/` | `WindowsEditor/`, `Windows/` |
+| Pak names | `pakchunk0-Linux.pak` | `pakchunk0-Windows.pak` |
+| Path separator in snippets | `/` | `\` (UE accepts `/` everywhere) |
+| RHI | Vulkan (default), SM5/SM6 via Vulkan | D3D12 / D3D11 |
+| Engine install registry | `~/.config/Epic/UnrealEngine/Install.ini` | `HKCU\Software\Epic Games\Unreal Engine\Builds` |
+
+**Linux gotchas that bite agents:**
+- **Case-sensitive filesystem.** `#include "MyActor.h"` must match on-disk case exactly; so must
+  `/Game/...` asset paths on disk, `Config/` names, and `Build.cs` paths. A Windows-authored
+  project can fail to build or cook on Linux purely from case mismatches.
+- **No `.exe` / `.dll` / `.lib`.** Executables have no extension; shared libs are `.so`, static `.a`.
+  `PublicDelayLoadDLLs` is Windows-only.
+- **Exec bit.** `.sh` scripts and engine binaries must be executable (`chmod +x`, zip extraction can drop it).
+- **Line endings.** Keep LF; CRLF in `.sh`/`.ini` breaks scripts and config parsing.
+- **File watchers / handles.** Large projects may need higher `fs.inotify.max_user_watches` and `ulimit -n`.
+- **Windows-only features** (DirectML NNE backend, WASAPI, WMF media, D3D12 raytracing paths) are
+  absent; skills flag the Linux fallback where one exists.
 
 Skills target 5.8 APIs. Where an API moved or changed between 5.x versions, the skill notes it.
 

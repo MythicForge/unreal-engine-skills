@@ -1,7 +1,7 @@
 # Finding APIs in the engine source
 
 Deep-dive companion to [../SKILL.md](../SKILL.md). Grounded in UE 5.8 at
-`E:\Program Files\Epic Games\UE_5.8\Engine\Source` (Build.version: 5.8.1).
+`$UE_ROOT/Engine/Source` (Build.version: 5.8.4).
 
 A repeatable, step-by-step playbook for locating any class, function, or type
 without guessing. Uses tools available to an agent (Grep, Glob, Read).
@@ -14,21 +14,21 @@ without guessing. Uses tools available to an agent (Grep, Glob, Read).
 
 1. **Glob for the header** — most UE types have a header named after them:
    ```
-   Glob("**/*.h", path="E:/Program Files/Epic Games/UE_5.8/Engine/Source")
+   Glob("**/*.h", path="$UE_ROOT/Engine/Source")
    → filter for "GameplayTagContainer.h"
    ```
-   Result: `Runtime\GameplayTags\Classes\GameplayTagContainer.h`.
+   Result: `Runtime/GameplayTags/Classes/GameplayTagContainer.h`.
 
 2. **Grep for the declaration** (faster on large headers than reading the full file):
    ```
-   Grep("struct FGameplayTag\b", path="...GameplayTagContainer.h", output_mode="content")
+   Grep("struct FGameplayTag/b", path="...GameplayTagContainer.h", output_mode="content")
    → line 41: struct FGameplayTag
    ```
 
-3. **Identify the module** — the file lives under `Runtime\GameplayTags\`, so the
-   module name is `GameplayTags`. Confirm: `Runtime\GameplayTags\GameplayTags.Build.cs`.
+3. **Identify the module** — the file lives under `Runtime/GameplayTags/`, so the
+   module name is `GameplayTags`. Confirm: `Runtime/GameplayTags/GameplayTags.Build.cs`.
 
-4. **Determine the `#include`** — the header is under `Classes\` (a public root), so:
+4. **Determine the `#include`** — the header is under `Classes/` (a public root), so:
    ```cpp
    #include "GameplayTagContainer.h"
    ```
@@ -46,7 +46,7 @@ without guessing. Uses tools available to an agent (Grep, Glob, Read).
 
 1. **Grep for the symbol** — limit to one pass of headers:
    ```
-   Grep("SpawnActor", path="E:/Program Files/Epic Games/UE_5.8/Engine/Source/Runtime/Engine/Classes/Engine/World.h",
+   Grep("SpawnActor", path="$UE_ROOT/Engine/Source/Runtime/Engine/Classes/Engine/World.h",
         output_mode="content")
    ```
    Scan the output for the templated overload signature.
@@ -97,13 +97,13 @@ the corresponding source folder.
 
 ## Workflow 5 — You need a plugin API
 
-Plugin APIs live under `Engine\Plugins\` and follow the same pattern. Example:
+Plugin APIs live under `Engine/Plugins/` and follow the same pattern. Example:
 `GAMEPLAYABILITIES_API UAbilitySystemComponent` is declared in
-`Engine\Plugins\Runtime\GameplayAbilities\Source\GameplayAbilities\Public\AbilitySystemComponent.h`.
+`Engine/Plugins/Runtime/GameplayAbilities/Source/GameplayAbilities/Public/AbilitySystemComponent.h`.
 
 Steps:
-1. Glob for the header under `Engine\Plugins\`.
-2. Confirm the module via `<Module>.Build.cs` in the plugin's `Source\<Module>\`.
+1. Glob for the header under `Engine/Plugins/`.
+2. Confirm the module via `<Module>.Build.cs` in the plugin's `Source/<Module>/`.
 3. Confirm the plugin is enabled in the `.uproject`'s `Plugins` array.
 4. Add the module name to `Build.cs` dependencies.
 
@@ -115,9 +115,9 @@ Use the other available engine roots:
 
 | Version | Root |
 |---|---|
-| 5.5.1 | `E:\Repo\Git\UE_5_5_1_Fresh\UnrealEngine\Engine\Source` |
-| 5.7 | `E:\Program Files\Epic Games\UE_5.7\Engine\Source` |
-| 5.8.1 (primary) | `E:\Program Files\Epic Games\UE_5.8\Engine\Source` |
+| 5.5.1 | `$UE_ROOT_55/Engine/Source` |
+| 5.7 | `$UE_ROOT_57/Engine/Source` |
+| 5.8.4 (primary) | `$UE_ROOT/Engine/Source` |
 
 Grep the same symbol in all three, then diff the results. When an API changed
 between versions, document the version it changed in the skill or code you produce.
@@ -128,7 +128,7 @@ between versions, document the version it changed in the skill or code you produ
 
 | Situation | Strategy |
 |---|---|
-| Looking for a class | Grep `"class AMyClass\b"` in the expected file |
+| Looking for a class | Grep `"class AMyClass/b"` in the expected file |
 | Looking for a method | Grep `"MethodName"` in the header, then Read ±10 lines |
 | Looking for a UPROPERTY | Grep `"MemberName"` — the UPROPERTY line is usually 1–2 lines above |
 | Looking for specifiers on a known member | Read a 15-line window starting 2 lines before the member |
@@ -191,7 +191,7 @@ Key reading points:
   uses reflection macros and omits the `#include "MyClass.generated.h"` (last
   include), compilation fails with an obscure macro-not-found error.
 - **Using an Editor header in Runtime code** — if the found header is under
-  `Source\Editor\`, it is only available when `WITH_EDITOR` is defined. Wrapping
+  `Source/Editor/`, it is only available when `WITH_EDITOR` is defined. Wrapping
   it in `#if WITH_EDITOR` or moving your code to an Editor module is required.
 
 See [source-conventions.md](source-conventions.md) for the full naming prefix

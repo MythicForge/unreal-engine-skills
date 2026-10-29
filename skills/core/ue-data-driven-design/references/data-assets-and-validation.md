@@ -130,7 +130,7 @@ with `UEditorValidatorSubsystem::AddValidator`.
 ### CI integration
 
 ```
-UnrealEditor-Cmd.exe MyProject.uproject -run=DataValidation
+UnrealEditor-Cmd MyProject.uproject -run=DataValidation
 ```
 
 Outputs validation results to the log; non-zero exit code on failures. Wire this into your build

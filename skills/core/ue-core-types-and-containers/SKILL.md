@@ -231,7 +231,9 @@ See [references/utility-types.md](references/utility-types.md) for usage rules, 
 - **Holding a pointer into a `TArray` across an `Add`** — `Add` may reallocate;
   previously obtained `GetData()` pointers or element references are then invalid.
 - **`FName` is case-insensitive** — `FName("Hand_R") == FName("hand_r")`; never use it
-  where case matters.
+  where case matters — including file names and paths: `FName("MyFile")` equals `FName("myfile")`,
+  but `MyFile.uasset` and `myfile.uasset` are different files on Linux. Compare paths with
+  `FPaths`/`FString` case-sensitively on Linux, not via `FName`.
 - **`FText` equality is `EqualTo()`**, not `==` — `operator==` compares internal identity,
   not display strings.
 - **`FVector` components are `double`** — assigning `.X` to a `float` variable narrows.

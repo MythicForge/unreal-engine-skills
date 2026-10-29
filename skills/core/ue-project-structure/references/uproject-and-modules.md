@@ -56,7 +56,7 @@ configuration that appears under `"Modules"` in the `.uproject` or `"Modules"` i
 
 | Field | Type | JSON key | Notes |
 |---|---|---|---|
-| `Name` | `FName` | `"Name"` | Must match the folder name and `Build.cs` class name. |
+| `Name` | `FName` | `"Name"` | Must match the folder name and `Build.cs` class name. **Exact case on Linux** — `"mygame"` will not find `Source/MyGame/`. |
 | `Type` | `EHostType::Type` | `"Type"` | When/where the module is compiled in. |
 | `LoadingPhase` | `ELoadingPhase::Type` | `"LoadingPhase"` | When during startup the module is loaded. Omitting defaults to `Default`. |
 | `PlatformAllowList` / `PlatformDenyList` | `TArray<FString>` | `"PlatformAllowList"` etc. | Restrict compilation to specific platforms. |

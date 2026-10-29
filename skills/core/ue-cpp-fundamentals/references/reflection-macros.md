@@ -8,7 +8,7 @@ options that appear in real codebases. Grounded in UE 5.8
 ## How the macros work
 
 `UCLASS(...)`, `UPROPERTY(...)`, `UFUNCTION(...)`, `USTRUCT(...)`, `UENUM(...)`, and
-`UINTERFACE(...)` expand to empty stubs at C++ compile time (`ObjectMacros.h`:778-785). Their
+`UINTERFACE(...)` expand to empty stubs at C++ compile time (`ObjectMacros.h`:778-785 for `UPROPERTY`…`UDELEGATE`; `UCLASS` :808-811, `UINTERFACE` :815). Their
 actual content is parsed by UHT *before* the compiler runs. UHT generates a `ClassName.generated.h`
 containing the real boilerplate (thunks, reflection tables, `GENERATED_BODY` expansion). The
 `.generated.h` must be the last `#include` in the header; the compiler then sees the completed

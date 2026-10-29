@@ -153,7 +153,7 @@ FString Bad  = "hello";         // ANSI → implicit conversion, avoid
 FString Good = TEXT("hello");   // TCHAR — always use this
 ```
 
-Unreal's `TCHAR` is UTF-16 on Windows and UTF-32 on some other platforms. Do not assume
+Unreal's `TCHAR` is UTF-16 on Windows and UTF-32 on Linux and some other platforms (`wchar_t` is 4 bytes there). Do not assume
 2 bytes per character in cross-platform code.
 
 ---

@@ -158,7 +158,7 @@ is the fastest way to learn *why* processing is disabled.
    (`:629`) when `FocalLength` is -1.
 3. Process and export as in A. Mono uses the NNE models in
    `MonocularAnimationPipelineModels` (`:384`); `NNEBackend` is `NNERuntimeORTDml` on
-   Windows GPUs (`HyprsenseNode.cpp`:257).
+   Windows GPUs (Linux has no DirectML: use `NNERuntimeORTCpu`) (`HyprsenseNode.cpp`:257).
 
 ### D. Identity (Mesh to MetaHuman)
 
@@ -326,7 +326,7 @@ for path in unreal.EditorAssetLibrary.list_assets("/Game/Audio/Dialogue", recurs
         audio_to_anim(path, "/Game/Animation/Faces")
 ```
 
-Run it with `UnrealEditor-Cmd.exe <Project>.uproject -run=pythonscript -script=...` or from
+Run it with `UnrealEditor-Cmd <Project>.uproject -run=pythonscript -script=...` or from
 the editor Python console. Level Sequence export (`export_level_sequence`) needs a live
 editor; Epic's scripts note it is not supported in headless `-run=pythonscript` mode.
 

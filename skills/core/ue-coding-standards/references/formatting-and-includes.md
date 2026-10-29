@@ -137,9 +137,14 @@ Order for a **source file** (`.cpp`):
 
 ```cpp
 #include "MyActor.h"
-#include "Components/StaticMeshComponent.h"
+#include "Components/StaticMeshComponent.h"   // folder AND file case must match disk
 #include "Engine/World.h"
 ```
+
+On Linux (case-sensitive) `#include "components/staticmeshcomponent.h"` or
+`#include "myactor.h"` for `MyActor.h` is a hard error; on Windows it silently works. Copy the
+exact case from the header, and rename files with `git mv` (see the case-rename note in
+`ue-project-structure`).
 
 Do not include the `.generated.h` in a `.cpp` — it belongs in the header.
 
@@ -196,7 +201,7 @@ class MYGAME_API AMyPawn : public APawn
 ```
 
 The macro expands to `__declspec(dllexport)` when building the module and
-`__declspec(dllimport)` when consuming it (Windows; other platforms use visibility attributes).
+`__declspec(dllimport)` when consuming it (Windows; Linux uses `__attribute__((visibility("default")))` via `Core/Public/Linux/LinuxPlatform.h`).
 This is defined per-platform in `Core/Public/Windows/WindowsPlatform.h`:209–210.
 
 Without the macro, the linker cannot find the symbol in other modules. Engine examples:

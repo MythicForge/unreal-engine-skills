@@ -244,7 +244,7 @@ Full custom-category walkthrough:
 
 ## Native debugger (C++ breakpoints and inspection)
 
-Attach Visual Studio or Rider to the Unreal Editor process (or launch with `-debug`). Unreal
+Attach Visual Studio (Windows) or Rider / VS Code with CodeLLDB or cpptools (Linux) / `gdb` / `lldb` to the Unreal Editor process (or launch with `-debug`). Unreal
 ships `.natvis` files so the watch window renders `FString`, `FName`, `TArray`, `TMap`, and
 `FVector` as readable values rather than raw memory.
 

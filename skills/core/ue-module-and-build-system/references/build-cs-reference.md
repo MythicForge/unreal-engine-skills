@@ -1,7 +1,7 @@
 # Build.cs (ModuleRules) Reference
 
 Grounded in UE 5.8 engine source:
-`E:\Program Files\Epic Games\UE_5.8\Engine\Source\Programs\UnrealBuildTool\Configuration\Rules\ModuleRules.cs`
+`$UE_ROOT/Engine/Source/Programs/UnrealBuildTool/Configuration/Rules/ModuleRules.cs`
 
 See also: [../SKILL.md](../SKILL.md)
 
@@ -77,12 +77,24 @@ public class MyThirdParty : ModuleRules
     {
         Type = ModuleType.External;    // no C++ source in this module
         string LibPath = Path.Combine(ModuleDirectory, "lib", Target.Platform.ToString());
+        // On disk the folder must be exactly "Linux" / "Win64" (case-sensitive on Linux);
+        // "include", "lib" and the lib file names below are likewise matched exactly.
 
         PublicSystemIncludePaths.Add(Path.Combine(ModuleDirectory, "include"));
-        PublicAdditionalLibraries.Add(Path.Combine(LibPath, "mylib.lib"));
-        PublicDelayLoadDLLs.Add("mylib.dll");
-        RuntimeDependencies.Add("$(BinaryOutputDir)/mylib.dll",
-            Path.Combine(LibPath, "mylib.dll"));
+        if (Target.Platform == UnrealTargetPlatform.Linux)
+        {
+            // Linux: static .a, or shared .so staged next to the binary
+            PublicAdditionalLibraries.Add(Path.Combine(LibPath, "libmylib.a"));
+            RuntimeDependencies.Add("$(BinaryOutputDir)/libmylib.so",
+                Path.Combine(LibPath, "libmylib.so"));
+        }
+        else if (Target.Platform == UnrealTargetPlatform.Win64)
+        {
+            PublicAdditionalLibraries.Add(Path.Combine(LibPath, "mylib.lib"));
+            PublicDelayLoadDLLs.Add("mylib.dll");   // Windows only; no Linux equivalent
+            RuntimeDependencies.Add("$(BinaryOutputDir)/mylib.dll",
+                Path.Combine(LibPath, "mylib.dll"));
+        }
     }
 }
 ```
@@ -114,6 +126,11 @@ if (Target.Platform == UnrealTargetPlatform.Win64)
     PrivateDependencyModuleNames.Add("WindowsSpecificModule");
 }
 
+if (Target.IsInPlatformGroup(UnrealPlatformGroup.Linux))   // Linux, LinuxArm64
+{
+    PrivateDependencyModuleNames.Add("LinuxSpecificModule");
+}
+
 if (Target.Configuration == UnrealTargetConfiguration.Shipping)
 {
     PublicDefinitions.Add("MY_FEATURE_DISABLED=1");
@@ -138,7 +155,7 @@ rather than shipping separate files.
 - `ModuleRules.cs`:1270 — `PrivateDependencyModuleNames`
 
 All paths under:
-`E:\Program Files\Epic Games\UE_5.8\Engine\Source\Programs\UnrealBuildTool\Configuration\Rules\`
+`$UE_ROOT/Engine/Source/Programs/UnrealBuildTool/Configuration/Rules/`
 
 Official docs:
 - Module Properties — <https://dev.epicgames.com/documentation/unreal-engine/module-properties-in-unreal-engine>

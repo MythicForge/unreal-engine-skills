@@ -60,10 +60,10 @@ Order skills roughly like this. Omit sections that don't apply.
 
 ## 4. Repo-specific rules
 
-- **Target UE 5.8.** Snippets must be valid against 5.8. When an API differs across 5.x,
+- **Target UE 5.8 (verified against 5.8.4).** Snippets must be valid against 5.8.4. When an API differs across 5.x,
   add a short *Version note*.
 - **Ground in real source, and always reference it.** Cite verified paths under
-  `E:\Program Files\Epic Games\UE_5.8\Engine\Source\...`. Prefer naming the header and class
+  `$UE_ROOT/Engine/Source/...`. Prefer naming the header and class
   (e.g. `GameFramework/Actor.h` → `AActor`) over vague references. If unsure of a signature,
   read the header before asserting it. **Every skill must include a "References & source
   material" section** with at least one verified engine-source path (and official UE 5.8 doc

@@ -14,9 +14,9 @@ docs.
 together:
 
 - **Engine instrumentation** — macros emit typed events to a per-thread ring buffer.
-- **UnrealTraceServer** (`Engine/Binaries/Win64/UnrealTraceServer.exe`) — background
+- **UnrealTraceServer** (`Engine/Binaries/Linux/UnrealTraceServer`) — background
   service listening on port 1981; records streams to `.utrace` files.
-- **Unreal Insights** (`Engine/Binaries/Win64/UnrealInsights.exe`) — offline or live
+- **Unreal Insights** (`Engine/Binaries/Linux/UnrealInsights`) — offline or live
   viewer that reads `.utrace`/`.ucache` files.
 
 Traces are self-describing and version-tolerant; a 5.5 trace opens in a 5.8 viewer.
@@ -38,7 +38,7 @@ for game development:
 | `module` | Module load info; required for callstack symbol resolution |
 | `bookmark` | `TRACE_BOOKMARK` string markers |
 | `log` | All `UE_LOG` messages |
-| `contextswitches` | OS thread context switches (Windows: requires admin) |
+| `contextswitches` | OS thread context switches (Windows: requires admin; Linux: needs perf/ptrace permissions, often root) |
 | `task` | Task Graph task lifecycle |
 
 Default channels (enabled automatically): `cpu`, `frame`, `gpu`, `bookmark`, `log`,
@@ -57,13 +57,13 @@ in the toolbar shows status and lets you save a snapshot.
 
 ```
 # Record to the Trace Server (live view in Insights):
-YourGame.exe -trace=cpu,gpu,frame,stats,bookmark,log -tracehost=127.0.0.1
+YourGame -trace=cpu,gpu,frame,stats,bookmark,log -tracehost=127.0.0.1
 
 # Record to a file:
-YourGame.exe -trace=cpu,gpu,frame,memtag -tracefile=C:\Traces\session.utrace
+YourGame -trace=cpu,gpu,frame,memtag -tracefile=/tmp/traces/session.utrace
 
 # Memory leak hunt (Development build):
-YourGame.exe -trace=cpu,memalloc,memtag,callstack,module -llm
+YourGame -trace=cpu,memalloc,memtag,callstack,module -llm
 ```
 
 ### From the console at runtime
@@ -125,7 +125,7 @@ the Timing panel markers track and in the Log view.
 
 ## Callstack symbol resolution
 
-Insights resolves callstack addresses using `.pdb` (Windows) or `.elf` files. Paths
+Insights resolves callstack addresses using `.pdb` (Windows), or `.sym`/`.debug`/`.elf` files (Linux). Paths
 searched in order:
 1. Paths the user adds in the Modules panel.
 2. Executable directory (if embedded).

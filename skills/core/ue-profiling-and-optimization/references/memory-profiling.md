@@ -45,8 +45,8 @@ small per-allocation overhead; enable only when investigating memory.
 
 Command line:
 ```
-YourGame.exe -llm
-YourGame.exe -llm -llmtagsets=assets   # enable per-asset tags (heavy)
+YourGame -llm
+YourGame -llm -llmtagsets=assets   # enable per-asset tags (heavy)
 ```
 
 View:
@@ -90,7 +90,7 @@ Development build only for `memalloc` (callstacks). `memtag` works in any build 
 `-llm`.
 
 ```
-YourGame.exe -trace=memalloc,memtag,callstack,module -llm -tracehost=127.0.0.1
+YourGame -trace=memalloc,memtag,callstack,module -llm -tracehost=127.0.0.1
 ```
 
 Open Unreal Insights → Session Browser → double-click the session → Menu → Memory Insights.

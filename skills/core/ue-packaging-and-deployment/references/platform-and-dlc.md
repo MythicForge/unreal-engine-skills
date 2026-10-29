@@ -118,8 +118,8 @@ Official doc: [General Patching Information](https://dev.epicgames.com/documenta
 DLC content is built as a separate cook that excludes the base game content:
 
 ```
-RunUAT.bat BuildCookRun -project=... -platform=Win64 -clientconfig=Shipping ^
-  -cook -DLCName=MyDLC -BasedOnReleaseVersion=1.0 ^
+RunUAT.sh BuildCookRun -project=... -platform=Linux -clientconfig=Shipping \
+  -cook -DLCName=MyDLC -BasedOnReleaseVersion=1.0 \
   -stage -pak -archive -archivedirectory=...
 ```
 

@@ -302,7 +302,7 @@ For code-level dependencies between modules inside or across plugins, list the m
 
 ## References & source material
 
-Engine source (UE 5.8, under `E:\Program Files\Epic Games\UE_5.8\Engine\Source\`):
+Engine source (UE 5.8, under `$UE_ROOT/Engine/Source/`):
 - `Runtime/Projects/Public/PluginDescriptor.h` — `FPluginDescriptor`:38,
   `EPluginEnabledByDefault`:28, `Modules` field:90, `bCanContainContent`:127,
   `Plugins` field:174.
@@ -317,7 +317,7 @@ Engine source (UE 5.8, under `E:\Program Files\Epic Games\UE_5.8\Engine\Source\`
 - `Runtime/Core/Public/Modules/ModuleInterface.h` — `IModuleInterface`, `StartupModule`:49,
   `ShutdownModule`:79.
 
-Real example descriptor: `E:\Program Files\Epic Games\UE_5.8\Engine\Plugins\FX\Niagara\Niagara.uplugin`
+Real example descriptor: `$UE_ROOT/Engine/Plugins/FX/Niagara/Niagara.uplugin`
 
 Official docs (UE 5.8):
 - Plugins in Unreal Engine —

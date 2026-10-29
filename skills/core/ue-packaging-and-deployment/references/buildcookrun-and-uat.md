@@ -16,8 +16,11 @@ files) at startup and executes named commands. The entry point for packaging is 
 `ProjectParams` object and then calls stage methods in sequence.
 
 The runner scripts are at `Engine/Build/BatchFiles/`:
+- Linux/macOS: `RunUAT.sh`
 - Windows: `RunUAT.bat`
-- macOS/Linux: `RunUAT.sh`
+
+On Linux the scripts need the execute bit (`chmod +x`) and use the bundled Mono/.NET
+from the engine tree; run them from any directory with the full path.
 
 ## BuildCookRun pipeline stages
 
@@ -101,24 +104,26 @@ A typical CI packaging command uses `-build -cook -stage -pak -archive` and omit
 | `-run` | Launch on device after deployment |
 | `-addcmdline="<args>"` | Pass extra command-line arguments to the launched game |
 
-## Minimal CI example (Win64 Shipping)
+## Minimal CI example (Linux Shipping)
 
-```bat
-Engine\Build\BatchFiles\RunUAT.bat BuildCookRun ^
-  -project=D:\MyGame\MyGame.uproject ^
-  -noP4 ^
-  -platform=Win64 ^
-  -clientconfig=Shipping ^
-  -build ^
-  -cook ^
-  -allmaps ^
-  -stage ^
-  -pak ^
-  -iostore ^
-  -archive ^
-  -archivedirectory=D:\Builds\MyGame_Win64_Shipping ^
+```bash
+$UE_ROOT/Engine/Build/BatchFiles/RunUAT.sh BuildCookRun \
+  -project=/home/ci/MyGame/MyGame.uproject \
+  -noP4 \
+  -platform=Linux \
+  -clientconfig=Shipping \
+  -build \
+  -cook \
+  -allmaps \
+  -stage \
+  -pak \
+  -iostore \
+  -archive \
+  -archivedirectory=/home/ci/Builds/MyGame_Linux_Shipping \
   -warningsaserrors
 ```
+
+Windows equivalent: `RunUAT.bat`, `-platform=Win64`, `^` line continuations, `D:\Builds\...` paths.
 
 ## Skipping the build stage in CI
 
@@ -126,8 +131,8 @@ When a dedicated build step already compiled the executable (common in
 multi-stage pipelines), omit `-build` from the package step. The cook and pak
 stages do not require a fresh compile if the executable is already on disk.
 
-```bat
-RunUAT.bat BuildCookRun -project=... -platform=Win64 -clientconfig=Shipping ^
+```bash
+RunUAT.sh BuildCookRun -project=... -platform=Linux -clientconfig=Shipping \
   -cook -allmaps -stage -pak -iostore -archive -archivedirectory=...
 ```
 
@@ -143,6 +148,6 @@ automation script with shared cook output.
 
 The Project Launcher generates a `BuildCookRun` command line from its UI; the Output
 Log shows the exact command run. Everything that follows `BuildCookRun` in that log can
-be pasted after `RunUAT.bat BuildCookRun` to reproduce the same build from the command
+be pasted after `RunUAT.sh BuildCookRun` (`RunUAT.bat` on Windows) to reproduce the same build from the command
 line. This is a reliable way to discover the correct flags for a new platform without
 hand-authoring them.

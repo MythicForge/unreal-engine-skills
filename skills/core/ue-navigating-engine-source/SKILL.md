@@ -31,40 +31,44 @@ Memory is often a version or two stale.
 
 ## Source tree on this machine
 
+`$UE_ROOT` is the directory containing `Engine/` (here `~/projects/Linux_Unreal_Engine_5.8.4` on
+Linux; `C:\Program Files\Epic Games\UE_5.8` on Windows). Resolve it first (`echo $UE_ROOT`, or
+`find ~ /opt -maxdepth 3 -name Build.version`). Linux paths are case-sensitive.
+
 | Version | Root | Notes |
 |---|---|---|
-| **5.8** (primary) | `E:\Program Files\Epic Games\UE_5.8\Engine` | Binary install; ships full C++ source |
-| 5.7 | `E:\Program Files\Epic Games\UE_5.7\Engine` | Binary install; previous release for comparison |
-| 5.5.1 | `E:\Repo\Git\UE_5_5_1_Fresh\UnrealEngine\Engine` | Full source build |
+| **5.8** (primary) | `$UE_ROOT/Engine` | Binary install; ships full C++ source |
+| 5.7 | `$UE_ROOT_57/Engine` | Optional, not installed on this machine; set if you keep one for diffing |
+| 5.5.1 | `$UE_ROOT_55/Engine` | Optional, not installed on this machine |
 
 Default to **5.8**. Use the others only to compare signatures across versions.
 
 Confirm the exact version any time:
-`E:\Program Files\Epic Games\UE_5.8\Engine\Build\Build.version`
-→ MajorVersion 5, MinorVersion 8, PatchVersion 1.
+`$UE_ROOT/Engine/Build/Build.version`
+→ MajorVersion 5, MinorVersion 8, PatchVersion 4.
 
 ## Source tree organization
 
-`Engine\Source\` has five top-level subdirectories:
+`Engine/Source/` has five top-level subdirectories:
 
 | Folder | Purpose | In shipping builds? |
 |---|---|---|
-| `Runtime\` | Gameplay, rendering, audio, net, core — the most-needed code | Yes |
-| `Editor\` | Editor tools (`UnrealEd`, `Kismet`, `BlueprintGraph`, `LevelEditor`) | No |
-| `Developer\` | Build tooling, profiling helpers, automation | No |
-| `Programs\` | Standalone executables (UBT, `UnrealLightmass`, `AutomationTool`) | No |
-| `ThirdParty\` | Vendored external source | Varies |
+| `Runtime/` | Gameplay, rendering, audio, net, core — the most-needed code | Yes |
+| `Editor/` | Editor tools (`UnrealEd`, `Kismet`, `BlueprintGraph`, `LevelEditor`) | No |
+| `Developer/` | Build tooling, profiling helpers, automation | No |
+| `Programs/` | Standalone executables (UBT, `UnrealLightmass`, `AutomationTool`) | No |
+| `ThirdParty/` | Vendored external source | Varies |
 
-Plugins (often where newer and optional systems live) are under `Engine\Plugins\`,
-organized by category: `AI\`, `Animation\`, `EnhancedInput\`, `FX\` (Niagara),
-`Runtime\` (GameplayAbilities, CommonUI, …), `Experimental\`, and more.
+Plugins (often where newer and optional systems live) are under `Engine/Plugins/`,
+organized by category: `AI/`, `Animation/`, `EnhancedInput/`, `FX/` (Niagara),
+`Runtime/` (GameplayAbilities, CommonUI, …), `Experimental/`, and more.
 
-**Rule:** an API under `Source\Editor\` or behind `#if WITH_EDITOR` is unavailable
+**Rule:** an API under `Source/Editor/` or behind `#if WITH_EDITOR` is unavailable
 in a packaged game. Verify the path before depending on it.
 
 ## Module structure (Public / Private / Classes)
 
-Every module is a folder under `Source\<Tier>\<ModuleName>\` containing:
+Every module is a folder under `Source/<Tier>/<ModuleName>/` containing:
 
 ```
 <ModuleName>/
@@ -74,34 +78,34 @@ Every module is a folder under `Source\<Tier>\<ModuleName>\` containing:
   <ModuleName>.Build.cs — declares the module; lists dependencies
 ```
 
-The `Engine` module exemplifies all three roots. Its `Classes\` tree has category
+The `Engine` module exemplifies all three roots. Its `Classes/` tree has category
 subfolders grounded in the 5.8 tree:
 
-- `Runtime\Engine\Classes\GameFramework\` — `Actor.h`, `Character.h`,
+- `Runtime/Engine/Classes/GameFramework/` — `Actor.h`, `Character.h`,
   `GameModeBase.h`, `PlayerController.h`, `Pawn.h`, `GameStateBase.h`,
   `PlayerState.h`, `SpringArmComponent.h`, `SaveGame.h`
-- `Runtime\Engine\Classes\Components\` — `ActorComponent.h`,
+- `Runtime/Engine/Classes/Components/` — `ActorComponent.h`,
   `SceneComponent.h`, `PrimitiveComponent.h`, `StaticMeshComponent.h`,
   `SkeletalMeshComponent.h`, `CapsuleComponent.h`, `AudioComponent.h`,
   `SplineComponent.h`, `TimelineComponent.h`
-- `Runtime\Engine\Classes\Engine\` — `World.h`:931, `EngineTypes.h`,
+- `Runtime/Engine/Classes/Engine/` — `World.h`:931, `EngineTypes.h`,
   `AssetManager.h`, `Canvas.h`
-- `Runtime\Engine\Classes\Kismet\` — `GameplayStatics.h`,
+- `Runtime/Engine/Classes/Kismet/` — `GameplayStatics.h`,
   `BlueprintFunctionLibrary.h`, `KismetMathLibrary.h`, `KismetSystemLibrary.h`
-- `Runtime\Engine\Classes\Animation\` — `AnimInstance.h`, `AnimMontage.h`
-- `Runtime\Engine\Classes\Camera\` — `CameraComponent.h`,
+- `Runtime/Engine/Classes/Animation/` — `AnimInstance.h`, `AnimMontage.h`
+- `Runtime/Engine/Classes/Camera/` — `CameraComponent.h`,
   `PlayerCameraManager.h`
 
 Other key Runtime modules:
-- `Runtime\Core\Public\` — `CoreMinimal.h`, `Containers\Array.h`,
-  `Containers\Map.h`, `Math\Vector.h`, `Delegates\`
-- `Runtime\CoreUObject\Public\UObject\Object.h` — `UObject`:98,
+- `Runtime/Core/Public/` — `CoreMinimal.h`, `Containers/Array.h`,
+  `Containers/Map.h`, `Math/Vector.h`, `Delegates/`
+- `Runtime/CoreUObject/Public/UObject/Object.h` — `UObject`:98,
   `CreateDefaultSubobject`:129
-- `Runtime\GameplayTags\Classes\GameplayTagContainer.h` — `FGameplayTag`:41,
+- `Runtime/GameplayTags/Classes/GameplayTagContainer.h` — `FGameplayTag`:41,
   `FGameplayTagContainer`:247
-- `Runtime\AIModule\Classes\` — `AIController.h`, `BehaviorTree\`,
-  `EnvironmentQuery\`, `Perception\`
-- `Runtime\UMG\Public\` — `UUserWidget`, `UWidgetComponent`, widget bindings
+- `Runtime/AIModule/Classes/` — `AIController.h`, `BehaviorTree/`,
+  `EnvironmentQuery/`, `Perception/`
+- `Runtime/UMG/Public/` — `UUserWidget`, `UWidgetComponent`, widget bindings
 
 ## Naming prefixes as navigation hints
 
@@ -144,8 +148,8 @@ Confirm by finding `<ModuleName>.Build.cs` under the source folder.
 
 Glob for `**/<ClassName>.h` under the source root, then confirm with Grep:
 ```
-Glob("**/Character.h", path="E:/Program Files/Epic Games/UE_5.8/Engine/Source")
-→ Runtime\Engine\Classes\GameFramework\Character.h
+Glob("**/Character.h", path="$UE_ROOT/Engine/Source")
+→ Runtime/Engine/Classes/GameFramework/Character.h
 
 Grep("class ACharacter", path="...Character.h")
 → line 338: class ACharacter : public APawn
@@ -163,22 +167,22 @@ Read(path="...Actor.h", offset=2121, limit=15)  // read only the relevant range
 
 ### 3. Resolve module → include → Build.cs
 
-1. **Find the header**: Glob or Grep for the type across `Engine\Source\`.
-2. **Identify the module**: the source folder directly under `Source\<Tier>\`
+1. **Find the header**: Glob or Grep for the type across `Engine/Source/`.
+2. **Identify the module**: the source folder directly under `Source/<Tier>/`
    that contains the found file. Confirm by locating `<Module>.Build.cs` there.
-3. **Write the `#include`**: relative to the module's `Public\`/`Classes\` root,
+3. **Write the `#include`**: relative to the module's `Public/`/`Classes/` root,
    e.g. `#include "GameFramework/Actor.h"` (not the absolute path).
 4. **Add to Build.cs**: `PublicDependencyModuleNames` if the type appears in your
    public headers; `PrivateDependencyModuleNames` otherwise.
 
 ### 4. Plugin APIs
 
-Plugin headers follow the same pattern under `Engine\Plugins\`. Also confirm:
+Plugin headers follow the same pattern under `Engine/Plugins/`. Also confirm:
 - The plugin is enabled in `.uproject` (the `Plugins` array).
-- The module name matches `<Module>.Build.cs` inside `Source\<Module>\`.
+- The module name matches `<Module>.Build.cs` inside `Source/<Module>/`.
 
 Example: `UAbilitySystemComponent` →
-`Engine\Plugins\Runtime\GameplayAbilities\Source\GameplayAbilities\Public\AbilitySystemComponent.h`
+`Engine/Plugins/Runtime/GameplayAbilities/Source/GameplayAbilities/Public/AbilitySystemComponent.h`
 → module `"GameplayAbilities"`.
 
 ## Reading reflection specifiers
@@ -209,13 +213,13 @@ Every reflected header (`UCLASS`, `USTRUCT`, `UENUM`) must:
 
 Never edit `*.generated.h` — it is produced by Unreal Header Tool (UHT) before
 the C++ compiler runs and regenerated on every build. Generated files live under
-the module's `Intermediate\` folder, not in `Source\`.
+the module's `Intermediate/` folder, not in `Source/`.
 
 ## Verified examples (UE 5.8)
 
-All paths relative to `E:\Program Files\Epic Games\UE_5.8\Engine\Source\`:
+All paths relative to `$UE_ROOT/Engine/Source/`:
 
-**AActor** (`Runtime\Engine\Classes\GameFramework\Actor.h`):
+**AActor** (`Runtime/Engine/Classes/GameFramework/Actor.h`):
 - :281 `UCLASS(BlueprintType, Blueprintable, config=Engine, meta=(ShortTooltip="..."), MinimalAPI)`
 - :2125 `ENGINE_API virtual void BeginPlay();`
 - :2132 `ENGINE_API virtual void EndPlay(const EEndPlayReason::Type EndPlayReason);`
@@ -225,16 +229,16 @@ All paths relative to `E:\Program Files\Epic Games\UE_5.8\Engine\Source\`:
 - :3445 `virtual void OnConstruction(const FTransform& Transform) {}`
 - :3569 `ENGINE_API virtual void Destroyed();`
 
-**ACharacter** (`Runtime\Engine\Classes\GameFramework\Character.h:338`)
+**ACharacter** (`Runtime/Engine/Classes/GameFramework/Character.h:338`)
 
-**AGameModeBase** (`Runtime\Engine\Classes\GameFramework\GameModeBase.h:47`)
+**AGameModeBase** (`Runtime/Engine/Classes/GameFramework/GameModeBase.h:47`)
 
-**UWorld** (`Runtime\Engine\Classes\Engine\World.h:931`)
+**UWorld** (`Runtime/Engine/Classes/Engine/World.h:931`)
 
-**UObject** (`Runtime\CoreUObject\Public\UObject\Object.h:98`),
+**UObject** (`Runtime/CoreUObject/Public/UObject/Object.h:98`),
 `CreateDefaultSubobject`:129
 
-**FGameplayTag** (`Runtime\GameplayTags\Classes\GameplayTagContainer.h:41`),
+**FGameplayTag** (`Runtime/GameplayTags/Classes/GameplayTagContainer.h:41`),
 `FGameplayTagContainer`:247
 
 (Line numbers drift between patch releases — re-Grep to confirm, but paths and
@@ -242,7 +246,7 @@ class/function names are stable.)
 
 ## Gotchas
 
-- **Editor vs Runtime**: code under `Source\Editor\` or in `WITH_EDITOR` blocks
+- **Editor vs Runtime**: code under `Source/Editor/` or in `WITH_EDITOR` blocks
   is stripped from packaged games. Check before depending on it.
 - **Plugin gating**: a plugin API exists only when the plugin is enabled in the
   `.uproject`. If missing, the symbol will not compile.
@@ -257,16 +261,16 @@ class/function names are stable.)
 
 ## References & source material
 
-Engine source (UE 5.8, under `E:\Program Files\Epic Games\UE_5.8\Engine\`):
-- Version file: `Build\Build.version` (5.8.1, changelist 56057345).
-- Primary source root: `Engine\Source\` → `Runtime\`, `Editor\`, `Developer\`,
-  `Programs\`, `ThirdParty\`.
-- Plugin root: `Engine\Plugins\` → `AI\`, `Animation\`, `EnhancedInput\`, `FX\`,
-  `Runtime\`, `Experimental\`, and more.
-- `Runtime\Engine\Classes\GameFramework\Actor.h` — canonical example of a large
+Engine source (UE 5.8, under `$UE_ROOT/Engine/`):
+- Version file: `Build/Build.version` (5.8.4, changelist 58902052).
+- Primary source root: `Engine/Source/` → `Runtime/`, `Editor/`, `Developer/`,
+  `Programs/`, `ThirdParty/`.
+- Plugin root: `Engine/Plugins/` → `AI/`, `Animation/`, `EnhancedInput/`, `FX/`,
+  `Runtime/`, `Experimental/`, and more.
+- `Runtime/Engine/Classes/GameFramework/Actor.h` — canonical example of a large
   reflected class with all lifecycle hooks.
-- `Runtime\Core\Public\CoreMinimal.h` — the ubiquitous minimal include set.
-- `Runtime\CoreUObject\Public\UObject\Object.h` — `UObject` base class.
+- `Runtime/Core/Public/CoreMinimal.h` — the ubiquitous minimal include set.
+- `Runtime/CoreUObject/Public/UObject/Object.h` — `UObject` base class.
 
 Official docs (UE 5.8, fetched and confirmed):
 - Modules overview —

@@ -70,7 +70,7 @@ put logic inside a `check` or rely on console state in packaged builds. See
 ## The cook process
 
 Cooking converts editor assets (`.uasset`, textures, audio) into the target platform's
-runtime format. The cooker is invoked as a special commandlet mode of `UnrealEditor-cmd`.
+runtime format. The cooker is invoked as a special commandlet mode of `UnrealEditor-Cmd`.
 
 **What gets cooked:** assets reachable via hard or soft references from the startup map
 and any "always cook" directories/entries. Unreferenced content is not cooked. This is
@@ -93,14 +93,14 @@ Shader code can be shared across materials via `bShareMaterialShaderCode` in
 
 ## UAT BuildCookRun — the canonical pipeline
 
-The Unreal Automation Tool (`RunUAT.bat` / `RunUAT.sh`) orchestrates the full pipeline
+The Unreal Automation Tool (`RunUAT.sh` on Linux/macOS, `RunUAT.bat` on Windows) orchestrates the full pipeline
 via its `BuildCookRun` command:
 
 ```
-Engine/Build/BatchFiles/RunUAT.bat BuildCookRun \
-  -project=D:/MyGame/MyGame.uproject \
+Engine/Build/BatchFiles/RunUAT.sh BuildCookRun \
+  -project=/home/user/MyGame/MyGame.uproject \
   -noP4 \
-  -platform=Win64 \
+  -platform=Linux \
   -clientconfig=Shipping \
   -build \
   -cook \
@@ -108,7 +108,7 @@ Engine/Build/BatchFiles/RunUAT.bat BuildCookRun \
   -stage \
   -pak \
   -archive \
-  -archivedirectory=D:/Builds/MyGame_Shipping
+  -archivedirectory=/home/user/Builds/MyGame_Shipping
 ```
 
 Each flag maps to a stage: `-build` compiles the target, `-cook` runs the cooker,
@@ -139,7 +139,7 @@ encryption (configured via the crypto key system, not the deprecated ini flags).
 
 **Chunking** splits content across multiple pak/IoStore containers for streaming installs,
 DLC, or patching. Each chunk maps to a numbered `.pak` / `.ucas` file (e.g.
-`pakchunk1-Windows.pak`). Chunk 0 is the base install; chunks 1+ are downloaded
+`pakchunk1-Linux.pak`). Chunk 0 is the base install; chunks 1+ are downloaded
 separately. Configure via `bGenerateChunks = true` and Primary Asset Rules.
 
 Details: [references/pak-iostore-and-chunking.md](references/pak-iostore-and-chunking.md).
@@ -172,7 +172,7 @@ Access in code: `GetDefault<UProjectPackagingSettings>()` (editor only).
 
 ## Platforms, Device Profiles, and scalability
 
-Each platform target (Win64, Android, iOS, console) requires its SDK and platform files.
+Each platform target (Linux, Win64, Android, iOS, console) requires its SDK and platform files.
 Platform-specific packaging overrides live in `Config/[Platform]/[Platform]Game.ini`.
 
 **Device Profiles** (`DeviceProfiles.ini`) set per-platform CVars and scalability groups —

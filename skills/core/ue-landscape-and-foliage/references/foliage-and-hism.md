@@ -148,7 +148,7 @@ cell size defaults to 256 m (25600 cm). The cell size is separate from the World
 HLOD grid. To resize existing maps, use the `WorldPartitionFoliageBuilder` commandlet:
 
 ```
-UnrealEditor.exe MyProject MyMap -run=WorldPartitionBuilderCommandlet
+UnrealEditor-Cmd MyProject MyMap -run=WorldPartitionBuilderCommandlet
     -Builder=WorldPartitionFoliageBuilder -NewGridSize=51200
 ```
 

@@ -359,7 +359,7 @@ disk after recording is covered in [references/recording-and-runtime.md](referen
 - **NNE backend.** The video solver defaults to `NNERuntimeORTDml` on Windows and
   `NNERuntimeCoreML` on Mac (`HyprsenseRealtimeNode.cpp`:37-47); override with the
   `MonocularAnimationPipelineModels.NNEBackend` string, e.g. `NNERuntimeORTCpu` on a machine
-  without a DirectML-capable GPU.
+  without a DirectML-capable GPU (always the case on Linux, where DirectML does not exist).
 - **`bIsLiveProcessing` hides controls.** Subject settings reused by Take Recorder playback set
   it false (`MetaHumanLiveLinkSubjectSettings.h`:29-38); calibration/head controls disappear
   from the details panel because they cannot apply to recorded data.

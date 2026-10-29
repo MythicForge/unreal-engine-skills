@@ -66,7 +66,7 @@ treated as unclassified. Convenience masks: `EAutomationTestFlags_PriorityMask`,
 
 ### Run a test path prefix
 ```
-UnrealEditor-Cmd.exe MyGame.uproject
+UnrealEditor-Cmd MyGame.uproject
   -ExecCmds="Automation RunTest MyGame.Combat;Quit"
   -unattended -nopause -nullrhi
 ```
@@ -155,10 +155,10 @@ managed session:
 
 Gauntlet tests are implemented as C# `ITestNode` scripts that orchestrate UE
 sessions. They live outside the game project (in `Engine/Source/Programs/AutomationTool/`)
-and are invoked via `RunUAT.bat`:
+and are invoked via `RunUAT.sh` (`RunUAT.bat` on Windows):
 
 ```
-RunUAT.bat RunUnreal -Project=MyGame -Test=GauntletTest_MyGame -Platform=Win64 -Configuration=Development
+RunUAT.sh RunUnreal -Project=MyGame -Test=GauntletTest_MyGame -Platform=Linux -Configuration=Development
 ```
 
 Gauntlet is covered in the official docs at:

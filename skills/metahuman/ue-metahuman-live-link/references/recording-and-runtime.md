@@ -206,7 +206,7 @@ phone's IP; the stream itself is unicast.
   `FMonocularAnimationPipelineModels::NNEBackend` for machines without DirectML and monitor
   `ProcessingRate`.
 - Media: webcam capture goes through `MediaFrameworkUtilities` / platform media players
-  (WMF on Windows); keep the WmfMedia plugin enabled for packaged webcam capture.
+  (WMF on Windows; Linux webcam/media support is limited, verify per plugin); keep the WmfMedia plugin enabled for packaged webcam capture.
 - Timecode: `ELiveLinkSourceMode::Timecode` needs a timecode provider in the game; otherwise
   stay on `EngineTime`.
 - Editor-only ticking flags on `ULiveLinkComponentController` (`bUpdateInEditor`) are irrelevant

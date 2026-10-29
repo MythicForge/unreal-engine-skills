@@ -61,7 +61,7 @@ and per-command interpretation guidance.
 ## Unreal Insights — the full profiler
 
 Trace-based, low overhead, works in PIE and packaged builds. Produces `.utrace` files
-opened in `Engine\Binaries\Win64\UnrealInsights.exe`.
+opened in `Engine/Binaries/Linux/UnrealInsights`.
 
 ### Starting a trace
 
@@ -69,7 +69,7 @@ From the Editor bottom toolbar — click **Trace** to open the Trace widget; sel
 and click **Start Trace**. From the command line:
 
 ```
-MyGame.exe -trace=cpu,gpu,frame,bookmark,log -tracehost=127.0.0.1
+MyGame -trace=cpu,gpu,frame,bookmark,log -tracehost=127.0.0.1
 ```
 
 Channels of interest:

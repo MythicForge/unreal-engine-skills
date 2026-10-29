@@ -26,6 +26,10 @@ order, from `ConfigHierarchy.h` (`Engine/Source/Runtime/Core/Public/Misc/ConfigH
 | 7 | `{LOCAL_APP_DATA}/.../User{TYPE}.ini` | Per-user local overrides |
 | 8 | `{PROJECT}/Config/User{TYPE}.ini` | Per-user project overrides (never commit) |
 
+File names are case-sensitive on Linux: `Config/DefaultEngine.ini` loads, `Config/defaultengine.ini`
+or `Config/Defaultengine.ini` is silently ignored, and the platform folder must be `Config/Linux/LinuxEngine.ini`
+(not `linux/`). Section headers and keys inside the ini are matched case-insensitively.
+
 `Default{TYPE}.ini` (step 4) is where you make project-specific settings. It is committed
 to source control and ships with the project. Layers 7–8 are local-only and must not be
 committed.
@@ -176,7 +180,8 @@ Available typed getters on `FConfigCacheIni` (all in `ConfigCacheIni.h`):
 - are never committed (put `Saved/` in `.gitignore`)
 - are regenerated whenever the editor saves project settings
 
-If you edit `Saved/Config/WindowsEditor/Engine.ini` and a teammate doesn't have your
+If you edit `Saved/Config/LinuxEditor/Engine.ini` (`WindowsEditor` on Windows; the platform
+name matches the `GetIni` prefix below) and a teammate doesn't have your
 local override, you will see different behaviour. Always make persistent settings in
 `Config/Default*.ini`.
 
@@ -192,7 +197,7 @@ MyGame -ini:Engine:[/Script/Engine.Engine]:bSmoothFrameRate=False
 MyGame -DefEngineIni=CI/CIEngine.ini
 
 # Print a config value (console command in-engine):
-GetIni Windows@Engine:/Script/Engine.Engine bSmoothFrameRate
+GetIni Linux@Engine:/Script/Engine.Engine bSmoothFrameRate
 ```
 
 ## Version notes

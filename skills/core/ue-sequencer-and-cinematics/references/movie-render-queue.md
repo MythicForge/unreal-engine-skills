@@ -133,7 +133,7 @@ EXR channels by name.
 ## Command-line rendering
 
 ```
-UnrealEditor-Cmd.exe  MyProject.uproject  -game  -MoviePipelineConfig=/Game/Configs/MyConfig
+UnrealEditor-Cmd  MyProject.uproject  -game  -MoviePipelineConfig=/Game/Configs/MyConfig
     -MoviePipelineLocalExecutorClass=/Script/MovieRenderPipelineCore.MoviePipelinePIEExecutor
     -LevelSequence=/Game/Cinematics/MyCutscene  -windowed  -resx=1920  -resy=1080
     -nosplash  -nopause

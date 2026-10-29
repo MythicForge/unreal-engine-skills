@@ -1,7 +1,7 @@
 # Target.cs (TargetRules) Reference
 
 Grounded in UE 5.8 engine source:
-`E:\Program Files\Epic Games\UE_5.8\Engine\Source\Programs\UnrealBuildTool\Configuration\Rules\TargetRules.cs`
+`$UE_ROOT/Engine/Source/Programs/UnrealBuildTool/Configuration/Rules/TargetRules.cs`
 
 See also: [../SKILL.md](../SKILL.md)
 
@@ -17,8 +17,8 @@ Each inherits `TargetRules` and sets properties in its constructor.
 
 | Value | Artifact | Link style |
 |---|---|---|
-| `Game` | `<Game>.exe` — cooked, standalone | Monolithic on most platforms |
-| `Editor` | `UnrealEditor.exe` + game DLLs | Modular (separate DLLs) |
+| `Game` | `<Game>` (`<Game>.exe` on Windows) — cooked, standalone | Monolithic on most platforms |
+| `Editor` | `UnrealEditor` + game modules (`.so` on Linux, `.dll` on Windows) | Modular (separate shared libraries) |
 | `Client` | Cooked client-only binary (no server code) | Monolithic |
 | `Server` | Cooked server-only binary (no client/rendering code) | Monolithic |
 | `Program` | Standalone tool (e.g. `ShaderCompileWorker`) | Configurable |
@@ -124,7 +124,7 @@ to the current release (`Unreal5_8` in 5.8, `TargetRules.cs`:242).
 ## Source references
 
 All paths under:
-`E:\Program Files\Epic Games\UE_5.8\Engine\Source\Programs\UnrealBuildTool\Configuration\Rules\`
+`$UE_ROOT/Engine/Source/Programs/UnrealBuildTool/Configuration/Rules/`
 
 - `TargetRules.cs`:21 — `public enum TargetType`
 - `TargetRules.cs`:53 — `public enum TargetLinkType`

@@ -14,7 +14,7 @@
  *
  * Engine root resolution:
  *   1. UE_ENGINE_ROOT env var (the directory that CONTAINS Engine/), if set.
- *   2. E:\Program Files\Epic Games\UE_5.8 (this machine's primary install).
+ *   2. A platform default (see DEFAULT_ENGINE_ROOT below).
  *
  * Exit code 0 = all cited paths exist; 1 = at least one missing (or engine
  * root not found).
@@ -22,13 +22,17 @@
 
 import { readdir, readFile, stat } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
+import os from 'node:os';
 import path from 'node:path';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const repoRoot = path.resolve(__dirname, '..');
 const skillsRoot = path.join(repoRoot, 'skills');
 
-const DEFAULT_ENGINE_ROOT = 'E:\\Program Files\\Epic Games\\UE_5.8';
+const DEFAULT_ENGINE_ROOT =
+  process.platform === 'win32'
+    ? 'E:\\Program Files\\Epic Games\\UE_5.8'
+    : path.join(os.homedir(), 'projects', 'Linux_Unreal_Engine_5.8.4');
 const engineRoot = process.env.UE_ENGINE_ROOT?.trim() || DEFAULT_ENGINE_ROOT;
 
 // Matches Engine/Source/... and Engine/Plugins/... citations ending in a
@@ -78,7 +82,7 @@ async function findMarkdownFiles(dir) {
 async function main() {
   if (!(await isDir(path.join(engineRoot, 'Engine')))) {
     console.error(`[check-citations] Engine root not found: ${engineRoot}`);
-    console.error('[check-citations] Set UE_ENGINE_ROOT to the directory that contains Engine\\.');
+    console.error('[check-citations] Set UE_ENGINE_ROOT to the directory that contains Engine/.');
     process.exit(1);
   }
 

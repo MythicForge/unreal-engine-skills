@@ -31,8 +31,8 @@ Every task is scored on three layers, in order:
 
 | Layer | Check | How |
 |---|---|---|
-| 1. Compiles | Code builds against UE 5.8 with no errors | Drop generated files into a scratch UE 5.8 C++ project (`Source/<Module>/`) and build the Development Editor target |
-| 2. API truth | Every engine class/function/specifier used actually exists with that signature | Spot-check against `E:\Program Files\Epic Games\UE_5.8\Engine\Source` |
+| 1. Compiles | Code builds against UE 5.8 with no errors | Drop generated files into a scratch UE 5.8.4 C++ project (`Source/<Module>/`) and build the Development Editor target |
+| 2. API truth | Every engine class/function/specifier used actually exists with that signature | Spot-check against `$UE_ROOT/Engine/Source` |
 | 3. Task criteria | The task's specific acceptance criteria | Listed per task file |
 
 Record results as pass/fail per criterion. A task "passes" only when all three layers do.
@@ -63,9 +63,11 @@ then for each eval output:
 
 ```
 # copy generated .h/.cpp into EvalScratch/Source/EvalScratch/
-& "E:\Program Files\Epic Games\UE_5.8\Engine\Build\BatchFiles\Build.bat" `
-  EvalScratchEditor Win64 Development -Project="<path>\EvalScratch.uproject" -WaitMutex
+"$UE_ROOT/Engine/Build/BatchFiles/Linux/Build.sh" \
+  EvalScratchEditor Linux Development -Project="<path>/EvalScratch.uproject" -WaitMutex
 ```
+
+Windows: `Engine\Build\BatchFiles\Build.bat EvalScratchEditor Win64 Development -Project=...`.
 
 Some tasks need a plugin enabled in the `.uproject` (noted per task, e.g. GAS needs
 `GameplayAbilities`).

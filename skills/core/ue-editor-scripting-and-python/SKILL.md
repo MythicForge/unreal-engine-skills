@@ -92,7 +92,7 @@ Auto-detected `init_unreal.py` in any `Content/Python` folder also runs on start
 
 **Commandlet (headless):** `UPythonScriptCommandlet` runs a script without the full UI:
 ```
-UnrealEditor-Cmd.exe MyProject.uproject -run=pythonscript -script="my_script.py"
+UnrealEditor-Cmd MyProject.uproject -run=pythonscript -script="my_script.py"
 ```
 Source: `Plugins/Experimental/PythonScriptPlugin/Source/PythonScriptPlugin/Private/PythonScriptCommandlet.h:10`.
 

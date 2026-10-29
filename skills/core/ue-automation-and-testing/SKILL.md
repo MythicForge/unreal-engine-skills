@@ -233,7 +233,7 @@ you return `false` or call `UE_RETURN_ON_ERROR`):
 
 **Command line / CI (headless):**
 ```
-UnrealEditor-Cmd.exe MyProject.uproject
+UnrealEditor-Cmd MyProject.uproject
   -ExecCmds="Automation RunTest MyGame.Combat;Quit"
   -unattended -nopause -nullrhi
   -ReportExportPath="TestResults/"

@@ -126,12 +126,12 @@ the registered dotted path, and can also be run from the CLI.
 
 **Build (Unreal Build Tool):**
 ```
-UnrealBuildTool.exe MyModuleTests Win64 Test -Project=MyGame.uproject
+Engine/Build/BatchFiles/RunUBT.sh MyModuleTests Linux Test -Project=MyGame.uproject
 ```
 
 **Run:**
 ```
-Binaries\Win64\MyModuleTests.exe --run-tests [smoke] --reporter console
+Binaries/Linux/MyModuleTests --run-tests [smoke] --reporter console
 ```
 
 Catch2 CLI flags:

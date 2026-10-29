@@ -98,8 +98,12 @@ Controls which engine instance opens the project:
 | `""` (empty) | Walk up the directory hierarchy — use when engine and project share a repo |
 
 Wrong `EngineAssociation` is the most common cause of "opens with the wrong engine."
-Update it with the launcher or by running
-`UnrealVersionSelector.exe /switchversion MyGame.uproject`.
+Update it with the launcher (Windows/macOS) or by running
+`UnrealVersionSelector.exe /switchversion MyGame.uproject` (Windows). On Linux there is no
+launcher or version selector: edit `EngineAssociation` in the `.uproject` by hand, or launch the editor directly with the
+engine's own binary (`$UE_ROOT/Engine/Binaries/Linux/UnrealEditor /path/MyGame.uproject`).
+Source-built engines register their GUID in `~/.config/Epic/UnrealEngine/Install.ini`
+(the Linux counterpart of the Windows registry key above).
 
 Source: `ProjectDescriptor.h:76` (comment on `FString EngineAssociation`).
 
@@ -229,6 +233,13 @@ Always use virtual content paths — never OS paths:
 | `/PluginName/` | Plugin `Content/` |
 
 Asset object path format: `/Game/Path/To/Asset.Asset`.
+
+**Case:** package names are compared case-insensitively inside the engine (`FName`), but the
+`.uasset` lives on disk under `Content/`, and Linux filesystems are case-sensitive. Reference
+`/Game/Maps/Lvl_Main` using the exact on-disk folder/file case (`Content/Maps/Lvl_Main.umap`);
+two assets differing only by case (`Hero.uasset` / `hero.uasset`) coexist on Linux but collide on
+Windows/macOS and in the Asset Registry. Never create case-only-different names. Rename for case
+with `git mv` (direct on Linux; on Windows/macOS use a two-step `git mv Foo tmp && git mv tmp foo`).
 
 ## What to source-control (.gitignore)
 

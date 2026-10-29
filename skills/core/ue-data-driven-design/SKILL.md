@@ -244,7 +244,7 @@ virtual EDataValidationResult IsDataValid(FDataValidationContext& Context) const
 ```
 
 Run validation from the Content Browser (**Asset Actions → Validate Assets**) or via
-`UnrealEditor-Cmd.exe MyProject.uproject -run=DataValidation` for CI. The Data Validation plugin
+`UnrealEditor-Cmd MyProject.uproject -run=DataValidation` for CI. The Data Validation plugin
 calls `IsDataValid` on `UDataTable` itself (engine implementation) and on `UObject`-derived
 assets that override it.
 
